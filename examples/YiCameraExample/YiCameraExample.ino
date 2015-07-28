@@ -4,7 +4,7 @@
 
 
 
-const char* ssid     = "YI_XXXXXXX";
+const char* ssid     = "YDXJ_*******";
 const char* password = "1234567890";
 
 const char* host = "192.168.42.1";
