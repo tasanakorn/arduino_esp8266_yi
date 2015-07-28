@@ -60,11 +60,13 @@ bool YiClient::loop() {
                     Serial.println("Command error");
                 } else {
                     switch (msg_id) {
-                        case 7: //
-                        case 13: //
-                            if (strcmp(root["type"], "battery") == 0) {
+                        case 7: // 
+                        case 13: // 
+                            if (strcmp(root["type"], "battery") == 0 || 
+                                strcmp(root["type"], "adapter") == 0) {
+                                _battery_level = atol((const char *)root["param"]); 
                                 Serial.print("BATTERY : ");
-                                Serial.println(atol((const char *)root["param"]));
+                                Serial.println(_battery_level);
                             }
                             break;
                         case 257: // AUTH
@@ -76,7 +78,6 @@ bool YiClient::loop() {
 
                     }
                 }
-
 
             }
         }
@@ -94,11 +95,15 @@ bool YiClient::sendCommand(int msg_id) {
 bool YiClient::sendCommand(int msg_id, const char * param) {
     _processing = true;
     _processing_start_time = millis();
+    _last_msg_id = msg_id;
     String cmd = "";
     if (param == NULL) {
-        cmd = String("") + "{\"msg_id\":" + msg_id + ",\"token\":" + _token + "}";
+        cmd = String("") + 
+                "{\"msg_id\":" + msg_id + 
+                ",\"token\":" + _token + "}";
     } else {
-        cmd = String("") + "{\"msg_id\":" + msg_id + 
+        cmd = String("") + 
+                "{\"msg_id\":" + msg_id + 
                 ",\"token\":" + _token + 
                 ", \"param\":\"" + param + "\"}";
     }
